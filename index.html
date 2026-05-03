@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Doctor - AI Disease Identification</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'detector/css/style.css' %}">
+</head>
+<body>
+    <div class="background-decor blob-1"></div>
+    <div class="background-decor blob-2"></div>
+    
+    <div class="container glass-panel">
+        <header>
+            <div class="logo">🌿 Plant Doctor</div>
+            <p class="subtitle">AI-Powered Disease Identification</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <form action="{% url 'analyze' %}" method="post" enctype="multipart/form-data" id="upload-form">
+                    {% csrf_token %}
+                    <div class="upload-area" id="upload-area">
+                        <div class="upload-content">
+                            <span class="upload-icon">📸</span>
+                            <h3>Upload Plant Image</h3>
+                            <p>Drag & drop or click to select</p>
+                            <input type="file" name="image" id="image-input" accept="image/*" required>
+                        </div>
+                        <div id="preview-container" class="hidden">
+                            <img id="image-preview" src="" alt="Preview">
+                            <div class="change-image">Click to change</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" id="submit-btn" disabled>
+                        <span class="btn-text">Analyze Plant Condition</span>
+                        <div class="spinner hidden" id="spinner"></div>
+                    </button>
+                </form>
+            </section>
+
+            {% if error %}
+            <section class="result-section error-panel">
+                <h3>Error analyzing image</h3>
+                <p>{{ error }}</p>
+            </section>
+            {% endif %}
+
+            {% if result %}
+            <section class="result-section glass-panel-inner" id="result-section">
+                <h2>Diagnosis Results</h2>
+                <div class="markdown-body">
+                    {{ result|safe }}
+                </div>
+            </section>
+            {% endif %}
+        </main>
+        
+        <footer>
+            <p>Powered by Google Gemini Vision AI</p>
+        </footer>
+    </div>
+
+    <script src="{% static 'detector/js/script.js' %}"></script>
+</body>
+</html>
